@@ -31,7 +31,11 @@ class Elevator
   end
 
   def step!
-    @floor += 1
+    if status == GOING_UP
+      @floor += 1
+    elsif status == GOING_DOWN
+      @floor -= 1
+    end
     if floor == @requested_floor
       @status = WAITING
       open!
