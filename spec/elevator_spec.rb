@@ -44,6 +44,7 @@ class Elevator
       @floor -= 1
     end
     if requested_floor?(floor)
+      remove_floor_from_queue!(floor)
       @status = WAITING unless more_requested_floors?
       open!
     end
@@ -53,6 +54,10 @@ class Elevator
 
   def more_requested_floors?
     !@requested_floors.empty?
+  end
+
+  def remove_floor_from_queue!(floor)
+    @requested_floors.delete(floor)
   end
 
   def requested_floor?(floor)
