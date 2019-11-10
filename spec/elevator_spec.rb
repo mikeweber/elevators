@@ -1,0 +1,3 @@
+describe Elevator do
+
+end
