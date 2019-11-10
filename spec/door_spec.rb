@@ -7,6 +7,10 @@ class Door
     @open = true
   end
 
+  def close!
+    @open = false
+  end
+
   def closed?
     !@open
   end
