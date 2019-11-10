@@ -1,5 +1,7 @@
 class Elevator
-
+  def floor
+    0
+  end
 end
 
 describe Elevator do
