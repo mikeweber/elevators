@@ -11,10 +11,10 @@ class Elevator
   attr_reader :floor, :status, :open, :requested_floors
 
   def initialize
-    self.open             = false
-    self.status           = WAITING
-    self.floor            = 0
-    @requested_floors     = []
+    self.open         = false
+    self.status       = WAITING
+    self.floor        = 0
+    @requested_floors = []
   end
 
   def waiting?
@@ -44,26 +44,37 @@ class Elevator
   def step!
     return close! if open?
 
-    if status == GOING_UP
-      self.floor += 1
-    elsif status == GOING_DOWN
-      self.floor -= 1
-    end
-
-    if waiting? && any_requested_floors?
-      self.status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
-    end
-
-    if floor_requested?(floor)
-      remove_floor_from_queue!(floor)
-      self.status = WAITING unless more_requested_floors?
-      open!
-    end
+    move!
+    change_direction!
+    arrive_at_floor!
   end
 
   private
 
-  def any_requested_floors?
+  def move!
+    case status
+    when GOING_UP
+      self.floor += 1
+    when GOING_DOWN
+      self.floor -= 1
+    end
+  end
+
+  def change_direction!
+    return unless waiting? && has_requested_floors?
+
+    self.status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
+  end
+
+  def arrive_at_floor!
+    return unless floor_requested?(floor)
+
+    remove_floor_from_queue!(floor)
+    wait! unless more_requested_floors?
+    open!
+  end
+
+  def has_requested_floors?
     !requested_floors.empty?
   end
 
@@ -85,6 +96,10 @@ class Elevator
 
   def floor_requested?(floor)
     requested_floors.include?(floor)
+  end
+
+  def wait!
+    self.status = WAITING
   end
 
   def open!
