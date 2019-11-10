@@ -67,11 +67,11 @@ class Elevator
   end
 
   def arrive_at_floor!
-    return unless floor_requested?(floor)
+    return unless on_requested_floor?
 
-    remove_floor_from_queue!(floor)
-    wait! unless more_requested_floors?
+    remove_current_floor_from_queue!
     open!
+    finish_route!
   end
 
   def has_requested_floors?
@@ -82,6 +82,10 @@ class Elevator
     requested_floors.first
   end
 
+  def finish_route!
+    wait! unless more_requested_floors?
+  end
+
   def more_requested_floors?
     if going_up?
       requested_floors.any? { |f| f > floor }
@@ -90,8 +94,16 @@ class Elevator
     end
   end
 
+  def remove_current_floor_from_queue!
+    remove_floor_from_queue!(floor)
+  end
+
   def remove_floor_from_queue!(floor)
     requested_floors.delete(floor)
+  end
+
+  def on_requested_floor?
+    floor_requested?(floor)
   end
 
   def floor_requested?(floor)
