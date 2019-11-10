@@ -176,4 +176,32 @@ describe Elevator do
       expect(elevator).to be_open
     end
   end
+
+  context 'when waiting with the doors open' do
+    it 'the step method will close the door before going anywhere' do
+      elevator = Elevator.new
+      elevator.call_to_floor(1)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq(Elevator::GOING_UP)
+      expect(elevator).to_not be_open
+
+      elevator.step!
+
+      expect(elevator.floor).to eq(1)
+      expect(elevator.status).to eq(Elevator::WAITING)
+      expect(elevator).to be_open
+
+      elevator.call_to_floor(2)
+      elevator.step!
+
+      expect(elevator.floor).to eq(1)
+      expect(elevator.status).to eq(Elevator::GOING_UP)
+      expect(elevator).to be_closed
+      elevator.step!
+
+      expect(elevator.floor).to eq(2)
+      expect(elevator.status).to eq(Elevator::WAITING)
+      expect(elevator).to be_open
+    end
+  end
 end
