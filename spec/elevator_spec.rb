@@ -18,4 +18,9 @@ describe Elevator do
     elevator = Elevator.new
     expect(elevator.status).to eq('waiting')
   end
+
+  it 'starts with the doors closed' do
+    elevator = Elevator.new
+    expect(elevator).to_not be_open
+  end
 end
