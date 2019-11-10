@@ -226,6 +226,38 @@ describe Elevator do
 
       expect_elevator_status(elevator, 4, Elevator::WAITING, true)
     end
+
+    it 'switches from GOING_UP to GOING_DOWN when no more floors are requested above the current_floor' do
+      elevator = Elevator.new
+      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
+
+      elevator.call_to_floor(2)
+
+      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
+
+      elevator.call_to_floor(0)
+      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 2, Elevator::GOING_DOWN, true)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 2, Elevator::GOING_DOWN, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 1, Elevator::GOING_DOWN, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 0, Elevator::WAITING, true)
+    end
   end
 
   def expect_elevator_status(elevator, floor, status, open)
