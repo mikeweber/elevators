@@ -174,6 +174,42 @@ describe Elevator do
     end
   end
 
+  context 'when multiple floors are requested at the same time' do
+    it 'visits the floors as it reaches each one' do
+      elevator = Elevator.new
+      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
+
+      elevator.call_to_floor(1)
+      elevator.call_to_floor(4)
+      elevator.call_to_floor(3)
+      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 1, Elevator::GOING_UP, true)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 2, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 3, Elevator::GOING_UP, true)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 3, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 4, Elevator::WAITING, true)
+    end
+  end
+
   def expect_elevator_status(elevator, floor, status, open)
     expect(elevator.floor).to eq(floor)
     expect(elevator.status).to eq(status)
