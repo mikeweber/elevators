@@ -76,4 +76,20 @@ describe Elevator do
       expect(elevator).to_not be_open
     end
   end
+
+  context 'when status is going_up' do
+    it 'changes the current floor' do
+      elevator = Elevator.new
+      elevator.call_to_floor(1)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+
+      elevator.step!
+
+      expect(elevator.floor).to eq(1)
+      expect(elevator.status).to eq('waiting')
+      expect(elevator).to be_open
+    end
+  end
 end
