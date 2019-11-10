@@ -39,25 +39,22 @@ class Elevator
   end
 
   def call_to_floor(new_floor)
-    if floor == new_floor
-      open!
-    else
-      request_floor!(new_floor)
-    end
+    request_floor!(new_floor)
   end
 
   def step!
     return close! if open?
-
-    if waiting? && any_requested_floors?
-      @status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
-    end
 
     if status == GOING_UP
       @floor += 1
     elsif status == GOING_DOWN
       @floor -= 1
     end
+
+    if waiting? && any_requested_floors?
+      @status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
+    end
+
     if requested_floor?(floor)
       remove_floor_from_queue!(floor)
       @status = WAITING unless more_requested_floors?
@@ -229,6 +226,10 @@ describe Elevator do
       elevator.call_to_floor(2)
       elevator.step!
 
+      expect_elevator_status(elevator, 1, Elevator::WAITING, false)
+
+      elevator.step!
+
       expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
 
       elevator.step!
@@ -294,7 +295,11 @@ describe Elevator do
 
       elevator.step!
 
-      expect_elevator_status(elevator, 2, Elevator::GOING_DOWN, true)
+      expect_elevator_status(elevator, 2, Elevator::WAITING, true)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 2, Elevator::WAITING, false)
 
       elevator.step!
 
