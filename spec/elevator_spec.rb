@@ -18,6 +18,18 @@ class Elevator
     @status
   end
 
+  def waiting?
+    @status == WAITING
+  end
+
+  def going_up?
+    @status == GOING_UP
+  end
+
+  def going_down?
+    @status == GOING_DOWN
+  end
+
   def closed?
     !open?
   end
@@ -31,7 +43,9 @@ class Elevator
       open!
     else
       request_floor!(new_floor)
-      @status = new_floor > floor ? GOING_UP : GOING_DOWN
+      if waiting?
+        @status = new_floor > floor ? GOING_UP : GOING_DOWN
+      end
     end
   end
 
@@ -53,7 +67,11 @@ class Elevator
   private
 
   def more_requested_floors?
-    !@requested_floors.empty?
+    if going_up?
+      @requested_floors.any? { |f| f > floor }
+    elsif going_down?
+      @requested_floors.any? { |f| f < floor }
+    end
   end
 
   def remove_floor_from_queue!(floor)
