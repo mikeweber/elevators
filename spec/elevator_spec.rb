@@ -24,12 +24,9 @@ class Elevator
   def call_to_floor(new_floor)
     if floor == new_floor
       open!
-    elsif new_floor > floor
-      @status = GOING_UP
+    else
       @requested_floor = new_floor
-    elsif new_floor < floor
-      @status = GOING_DOWN
-      @requested_floor = new_floor
+      @status = new_floor > floor ? GOING_UP : GOING_DOWN
     end
   end
 
