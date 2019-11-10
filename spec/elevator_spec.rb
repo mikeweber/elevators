@@ -2,10 +2,11 @@ class Elevator
   def initialize
     @open   = false
     @status = 'waiting'
+    @floor  = 0
   end
 
   def floor
-    0
+    @floor
   end
 
   def status
@@ -24,6 +25,10 @@ class Elevator
     elsif new_floor < floor
       @status = 'going_down'
     end
+  end
+
+  def step!
+    @floor += 1
   end
 
   private
