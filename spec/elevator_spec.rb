@@ -3,6 +3,8 @@ class Elevator
   GOING_UP   = 'going_up'.freeze
   GOING_DOWN = 'going_down'.freeze
 
+  attr_reader :floor, :status, :open, :requested_floors
+
   def initialize
     @open             = false
     @status           = WAITING
@@ -10,32 +12,24 @@ class Elevator
     @requested_floors = []
   end
 
-  def floor
-    @floor
-  end
-
-  def status
-    @status
-  end
-
   def waiting?
-    @status == WAITING
+    status == WAITING
   end
 
   def going_up?
-    @status == GOING_UP
+    status == GOING_UP
   end
 
   def going_down?
-    @status == GOING_DOWN
+    status == GOING_DOWN
   end
 
   def closed?
-    !open?
+    !open
   end
 
   def open?
-    @open
+    open
   end
 
   def call_to_floor(new_floor)
@@ -65,31 +59,31 @@ class Elevator
   private
 
   def any_requested_floors?
-    !@requested_floors.empty?
+    !requested_floors.empty?
   end
 
   def first_requested_floor
-    @requested_floors.first
+    requested_floors.first
   end
 
   def more_requested_floors?
     if going_up?
-      @requested_floors.any? { |f| f > floor }
+      requested_floors.any? { |f| f > floor }
     elsif going_down?
-      @requested_floors.any? { |f| f < floor }
+      requested_floors.any? { |f| f < floor }
     end
   end
 
   def remove_floor_from_queue!(floor)
-    @requested_floors.delete(floor)
+    requested_floors.delete(floor)
   end
 
   def requested_floor?(floor)
-    @requested_floors.include?(floor)
+    requested_floors.include?(floor)
   end
 
   def request_floor!(floor)
-    @requested_floors.push(floor)
+    requested_floors.push(floor)
   end
 
   def open!
