@@ -29,4 +29,11 @@ describe Elevator do
       expect(elevator).to_not be_open
     end
   end
+
+  context 'when calling for an elevator' do
+    it 'opens the doors when called to the current floor' do
+      elevator = Elevator.new
+      elevator.call_to_floor(0)
+    end
+  end
 end
