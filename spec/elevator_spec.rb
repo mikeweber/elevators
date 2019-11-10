@@ -1,7 +1,11 @@
 class Elevator
+  WAITING    = 'waiting'.freeze
+  GOING_UP   = 'going_up'.freeze
+  GOING_DOWN = 'going_down'.freeze
+
   def initialize
     @open   = false
-    @status = 'waiting'
+    @status = WAITING
     @floor  = 0
   end
 
@@ -21,15 +25,15 @@ class Elevator
     if floor == new_floor
       open!
     elsif new_floor > floor
-      @status = 'going_up'
+      @status = GOING_UP
     elsif new_floor < floor
-      @status = 'going_down'
+      @status = GOING_DOWN
     end
   end
 
   def step!
     @floor += 1
-    @status = 'waiting'
+    @status = WAITING
     open!
   end
 
