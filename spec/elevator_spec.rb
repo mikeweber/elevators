@@ -1,6 +1,7 @@
 class Elevator
   def initialize
-    @open = false
+    @open   = false
+    @status = 'waiting'
   end
 
   def floor
@@ -8,7 +9,7 @@ class Elevator
   end
 
   def status
-    'waiting'
+    @status
   end
 
   def open?
@@ -16,7 +17,11 @@ class Elevator
   end
 
   def call_to_floor(new_floor)
-    open!
+    if floor == new_floor
+      open!
+    else
+      @status = 'going_up'
+    end
   end
 
   private
