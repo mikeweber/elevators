@@ -6,6 +6,10 @@ class Elevator
   def status
     'waiting'
   end
+
+  def open?
+    false
+  end
 end
 
 describe Elevator do
