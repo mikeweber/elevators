@@ -58,7 +58,7 @@ describe Elevator do
       expect(elevator).to be_open
     end
 
-    it 'goes begins the process of going to the requested floor when called' do
+    it 'begins the process of going up to the requested floor when called to a higher floor' do
       elevator = Elevator.new
       elevator.call_to_floor(1)
       expect(elevator.floor).to eq(0)
