@@ -29,6 +29,8 @@ class Elevator
 
   def step!
     @floor += 1
+    @status = 'waiting'
+    open!
   end
 
   private
