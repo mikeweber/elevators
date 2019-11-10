@@ -3,6 +3,7 @@ class Door
 
   def initialize
     @open = false
+    @held_open = false
   end
 
   def open!
