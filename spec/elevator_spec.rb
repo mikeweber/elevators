@@ -52,5 +52,13 @@ describe Elevator do
       expect(elevator.status).to eq('waiting')
       expect(elevator).to be_open
     end
+
+    it 'goes begins the process of going to the requested floor when called' do
+      elevator = Elevator.new
+      elevator.call_to_floor(1)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+    end
   end
 end
