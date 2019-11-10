@@ -1,4 +1,8 @@
 class Elevator
+  def initialize
+    @open = false
+  end
+
   def floor
     0
   end
@@ -8,11 +12,17 @@ class Elevator
   end
 
   def open?
-    false
+    @open
   end
 
   def call_to_floor(new_floor)
+    open!
+  end
 
+  private
+
+  def open!
+    @open = true
   end
 end
 
