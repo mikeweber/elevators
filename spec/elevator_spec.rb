@@ -43,14 +43,15 @@ class Elevator
       open!
     else
       request_floor!(new_floor)
-      if waiting?
-        @status = new_floor > floor ? GOING_UP : GOING_DOWN
-      end
     end
   end
 
   def step!
     return close! if open?
+
+    if waiting? && any_requested_floors?
+      @status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
+    end
 
     if status == GOING_UP
       @floor += 1
@@ -65,6 +66,14 @@ class Elevator
   end
 
   private
+
+  def any_requested_floors?
+    !@requested_floors.empty?
+  end
+
+  def first_requested_floor
+    @requested_floors.first
+  end
 
   def more_requested_floors?
     if going_up?
