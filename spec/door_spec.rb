@@ -42,4 +42,15 @@ describe Door do
       door.close!
     end.to change { door.open? }.from(true).to(false)
   end
+
+  it 'cannot be closed when being held open' do
+    door = Door.new
+    door.open!
+
+    door.held_open = true
+
+    expect do
+      door.close!
+    end.to_not change { door.open? }.from(true)
+  end
 end
