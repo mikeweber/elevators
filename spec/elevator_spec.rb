@@ -17,6 +17,10 @@ class Elevator
     @status
   end
 
+  def closed?
+    !open?
+  end
+
   def open?
     @open
   end
@@ -31,6 +35,8 @@ class Elevator
   end
 
   def step!
+    return close! if open?
+
     if status == GOING_UP
       @floor += 1
     elsif status == GOING_DOWN
@@ -46,6 +52,10 @@ class Elevator
 
   def open!
     @open = true
+  end
+
+  def close!
+    @open = false
   end
 end
 
