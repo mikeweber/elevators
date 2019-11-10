@@ -1,5 +1,7 @@
 class Door
-
+  def closed?
+    true
+  end
 end
 
 describe Door do
