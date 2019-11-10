@@ -115,6 +115,9 @@ describe Elevator do
     it 'opens the doors when called to the current floor' do
       elevator = Elevator.new
       elevator.call_to_floor(0)
+      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
+
+      elevator.step!
 
       expect_elevator_status(elevator, 0, Elevator::WAITING, true)
     end
@@ -123,12 +126,16 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(1)
 
+      elevator.step!
+
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
     end
 
     it 'begins the process of going down to the requested floor when called to a lower floor' do
       elevator = Elevator.new
       elevator.call_to_floor(-1)
+
+      elevator.step!
 
       expect_elevator_status(elevator, 0, Elevator::GOING_DOWN, false)
     end
@@ -138,6 +145,8 @@ describe Elevator do
     it 'changes the current floor' do
       elevator = Elevator.new
       elevator.call_to_floor(1)
+
+      elevator.step!
 
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
 
@@ -149,6 +158,8 @@ describe Elevator do
     it 'keeps going up until it has reached the destination floor' do
       elevator = Elevator.new
       elevator.call_to_floor(3)
+
+      elevator.step!
 
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
 
@@ -171,6 +182,8 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(-1)
 
+      elevator.step!
+
       expect_elevator_status(elevator,  0, Elevator::GOING_DOWN, false)
 
       elevator.step!
@@ -181,6 +194,8 @@ describe Elevator do
     it 'keeps going down until it has reached the destination floor' do
       elevator = Elevator.new
       elevator.call_to_floor(-3)
+
+      elevator.step!
 
       expect_elevator_status(elevator,  0, Elevator::GOING_DOWN, false)
 
@@ -202,6 +217,9 @@ describe Elevator do
     it 'the step method will close the door before going anywhere' do
       elevator = Elevator.new
       elevator.call_to_floor(1)
+
+      elevator.step!
+
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
 
       elevator.step!
@@ -227,6 +245,9 @@ describe Elevator do
       elevator.call_to_floor(1)
       elevator.call_to_floor(4)
       elevator.call_to_floor(3)
+
+      elevator.step!
+
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
 
       elevator.step!
@@ -259,6 +280,8 @@ describe Elevator do
       expect_elevator_status(elevator, 0, Elevator::WAITING, false)
 
       elevator.call_to_floor(2)
+
+      elevator.step!
 
       expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
 
