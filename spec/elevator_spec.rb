@@ -102,5 +102,31 @@ describe Elevator do
       expect(elevator.status).to eq('waiting')
       expect(elevator).to be_open
     end
+
+    it 'keeps going up until it has reached the destination floor' do
+      elevator = Elevator.new
+      elevator.call_to_floor(3)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+
+      elevator.step!
+
+      expect(elevator.floor).to eq(1)
+      expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+
+      elevator.step!
+
+      expect(elevator.floor).to eq(2)
+      expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+
+      elevator.step!
+
+      expect(elevator.floor).to eq(3)
+      expect(elevator.status).to eq('waiting')
+      expect(elevator).to be_open
+    end
   end
 end
