@@ -9,4 +9,9 @@ describe Elevator do
     elevator = Elevator.new
     expect(elevator.floor).to eq(0)
   end
+
+  it 'starts with a status of waiting' do
+    elevator = Elevator.new
+    expect(elevator.status).to eq('waiting')
+  end
 end
