@@ -1,0 +1,3 @@
+describe Door do
+
+end
