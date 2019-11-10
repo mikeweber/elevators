@@ -4,9 +4,10 @@ class Elevator
   GOING_DOWN = 'going_down'.freeze
 
   def initialize
-    @open   = false
-    @status = WAITING
-    @floor  = 0
+    @open             = false
+    @status           = WAITING
+    @floor            = 0
+    @requested_floors = []
   end
 
   def floor
@@ -29,7 +30,7 @@ class Elevator
     if floor == new_floor
       open!
     else
-      @requested_floor = new_floor
+      request_floor!(new_floor)
       @status = new_floor > floor ? GOING_UP : GOING_DOWN
     end
   end
@@ -42,13 +43,25 @@ class Elevator
     elsif status == GOING_DOWN
       @floor -= 1
     end
-    if floor == @requested_floor
-      @status = WAITING
+    if requested_floor?(floor)
+      @status = WAITING unless more_requested_floors?
       open!
     end
   end
 
   private
+
+  def more_requested_floors?
+    !@requested_floors.empty?
+  end
+
+  def requested_floor?(floor)
+    @requested_floors.include?(floor)
+  end
+
+  def request_floor!(floor)
+    @requested_floors.push(floor)
+  end
 
   def open!
     @open = true
