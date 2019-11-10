@@ -26,15 +26,19 @@ class Elevator
       open!
     elsif new_floor > floor
       @status = GOING_UP
+      @requested_floor = new_floor
     elsif new_floor < floor
       @status = GOING_DOWN
+      @requested_floor = new_floor
     end
   end
 
   def step!
     @floor += 1
-    @status = WAITING
-    open!
+    if floor == @requested_floor
+      @status = WAITING
+      open!
+    end
   end
 
   private
