@@ -54,7 +54,7 @@ describe Elevator do
 
     it 'starts with a status of waiting' do
       elevator = Elevator.new
-      expect(elevator.status).to eq('waiting')
+      expect(elevator.status).to eq(Elevator::WAITING)
     end
 
     it 'starts with the doors closed' do
@@ -68,7 +68,7 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(0)
       expect(elevator.floor).to eq(0)
-      expect(elevator.status).to eq('waiting')
+      expect(elevator.status).to eq(Elevator::WAITING)
       expect(elevator).to be_open
     end
 
@@ -76,7 +76,7 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(1)
       expect(elevator.floor).to eq(0)
-      expect(elevator.status).to eq('going_up')
+      expect(elevator.status).to eq(Elevator::GOING_UP)
       expect(elevator).to_not be_open
     end
 
@@ -84,7 +84,7 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(-1)
       expect(elevator.floor).to eq(0)
-      expect(elevator.status).to eq('going_down')
+      expect(elevator.status).to eq(Elevator::GOING_DOWN)
       expect(elevator).to_not be_open
     end
   end
@@ -94,13 +94,13 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(1)
       expect(elevator.floor).to eq(0)
-      expect(elevator.status).to eq('going_up')
+      expect(elevator.status).to eq(Elevator::GOING_UP)
       expect(elevator).to_not be_open
 
       elevator.step!
 
       expect(elevator.floor).to eq(1)
-      expect(elevator.status).to eq('waiting')
+      expect(elevator.status).to eq(Elevator::WAITING)
       expect(elevator).to be_open
     end
 
@@ -108,25 +108,25 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(3)
       expect(elevator.floor).to eq(0)
-      expect(elevator.status).to eq('going_up')
+      expect(elevator.status).to eq(Elevator::GOING_UP)
       expect(elevator).to_not be_open
 
       elevator.step!
 
       expect(elevator.floor).to eq(1)
-      expect(elevator.status).to eq('going_up')
+      expect(elevator.status).to eq(Elevator::GOING_UP)
       expect(elevator).to_not be_open
 
       elevator.step!
 
       expect(elevator.floor).to eq(2)
-      expect(elevator.status).to eq('going_up')
+      expect(elevator.status).to eq(Elevator::GOING_UP)
       expect(elevator).to_not be_open
 
       elevator.step!
 
       expect(elevator.floor).to eq(3)
-      expect(elevator.status).to eq('waiting')
+      expect(elevator.status).to eq(Elevator::WAITING)
       expect(elevator).to be_open
     end
   end
