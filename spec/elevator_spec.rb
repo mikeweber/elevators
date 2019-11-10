@@ -19,8 +19,10 @@ class Elevator
   def call_to_floor(new_floor)
     if floor == new_floor
       open!
-    else
+    elsif new_floor > floor
       @status = 'going_up'
+    elsif new_floor < floor
+      @status = 'going_down'
     end
   end
 
@@ -63,6 +65,14 @@ describe Elevator do
       elevator.call_to_floor(1)
       expect(elevator.floor).to eq(0)
       expect(elevator.status).to eq('going_up')
+      expect(elevator).to_not be_open
+    end
+
+    it 'begins the process of going down to the requested floor when called to a lower floor' do
+      elevator = Elevator.new
+      elevator.call_to_floor(-1)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq('going_down')
       expect(elevator).to_not be_open
     end
   end
