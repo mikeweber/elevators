@@ -38,7 +38,7 @@ class Elevator
   end
 
   def call_to_floor(new_floor)
-    request_floor!(new_floor)
+    requested_floors.push(new_floor)
   end
 
   def step!
@@ -54,7 +54,7 @@ class Elevator
       self.status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
     end
 
-    if requested_floor?(floor)
+    if floor_requested?(floor)
       remove_floor_from_queue!(floor)
       self.status = WAITING unless more_requested_floors?
       open!
@@ -83,12 +83,8 @@ class Elevator
     requested_floors.delete(floor)
   end
 
-  def requested_floor?(floor)
+  def floor_requested?(floor)
     requested_floors.include?(floor)
-  end
-
-  def request_floor!(floor)
-    requested_floors.push(floor)
   end
 
   def open!
