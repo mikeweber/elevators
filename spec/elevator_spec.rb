@@ -2,6 +2,10 @@ class Elevator
   def floor
     0
   end
+
+  def status
+    'waiting'
+  end
 end
 
 describe Elevator do
