@@ -38,6 +38,9 @@ describe Elevator do
     it 'opens the doors when called to the current floor' do
       elevator = Elevator.new
       elevator.call_to_floor(0)
+      expect(elevator.floor).to eq(0)
+      expect(elevator.status).to eq('waiting')
+      expect(elevator).to be_open
     end
   end
 end
