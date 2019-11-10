@@ -1,4 +1,6 @@
 class Door
+  attr_accessor :held_open
+
   def initialize
     @open = false
   end
@@ -8,6 +10,7 @@ class Door
   end
 
   def close!
+    return if held_open
     @open = false
   end
 
