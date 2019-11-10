@@ -1,6 +1,18 @@
 class Door
+  def initialize
+    @open = false
+  end
+
+  def open!
+    @open = true
+  end
+
   def closed?
-    true
+    !@open
+  end
+
+  def open?
+    @open
   end
 end
 
