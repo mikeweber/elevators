@@ -10,6 +10,10 @@ class Elevator
   def open?
     false
   end
+
+  def call_to_floor(new_floor)
+
+  end
 end
 
 describe Elevator do
