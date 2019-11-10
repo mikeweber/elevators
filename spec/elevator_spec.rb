@@ -3,13 +3,18 @@ class Elevator
   GOING_UP   = 'going_up'.freeze
   GOING_DOWN = 'going_down'.freeze
 
+  private
+  attr_writer :floor, :status, :open
+
+  public
+
   attr_reader :floor, :status, :open, :requested_floors
 
   def initialize
-    @open             = false
-    @status           = WAITING
-    @floor            = 0
-    @requested_floors = []
+    self.open             = false
+    self.status           = WAITING
+    self.floor            = 0
+    @requested_floors     = []
   end
 
   def waiting?
@@ -40,18 +45,18 @@ class Elevator
     return close! if open?
 
     if status == GOING_UP
-      @floor += 1
+      self.floor += 1
     elsif status == GOING_DOWN
-      @floor -= 1
+      self.floor -= 1
     end
 
     if waiting? && any_requested_floors?
-      @status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
+      self.status = first_requested_floor > floor ? GOING_UP : GOING_DOWN
     end
 
     if requested_floor?(floor)
       remove_floor_from_queue!(floor)
-      @status = WAITING unless more_requested_floors?
+      self.status = WAITING unless more_requested_floors?
       open!
     end
   end
@@ -87,11 +92,11 @@ class Elevator
   end
 
   def open!
-    @open = true
+    self.open = true
   end
 
   def close!
-    @open = false
+    self.open = false
   end
 end
 
