@@ -1,26 +1,33 @@
 class Door
   attr_accessor :held_open
+  attr_reader :open
+
+  private
+  attr_writer :open
+
+  public
 
   def initialize
-    @open = false
-    @held_open = false
+    self.open      = false
+    self.held_open = false
   end
 
   def open!
-    @open = true
+    self.open = true
   end
 
   def close!
     return if held_open
-    @open = false
+
+    self.open = false
   end
 
   def closed?
-    !@open
+    !open
   end
 
   def open?
-    @open
+    open
   end
 end
 
