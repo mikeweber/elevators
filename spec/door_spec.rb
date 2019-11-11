@@ -14,6 +14,8 @@ class Door
   end
 
   def open!
+    return if between_floors?
+
     self.open = true
   end
 
