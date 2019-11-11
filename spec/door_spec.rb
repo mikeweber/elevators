@@ -1,15 +1,16 @@
 class Door
   attr_accessor :held_open
-  attr_reader :open
+  attr_reader :open, :between_floors_lambda
 
   private
-  attr_writer :open
+  attr_writer :open, :between_floors_lambda
 
   public
 
-  def initialize
-    self.open      = false
-    self.held_open = false
+  def initialize(between_floors_lambda = nil)
+    self.open                  = false
+    self.held_open             = false
+    self.between_floors_lambda = between_floors_lambda
   end
 
   def open!
@@ -31,7 +32,9 @@ class Door
   end
 
   def between_floors?
+    return if between_floors_lambda.nil?
 
+    between_floors_lambda.call
   end
 end
 
