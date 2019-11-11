@@ -29,6 +29,10 @@ class Door
   def open?
     open
   end
+
+  def between_floors?
+
+  end
 end
 
 describe Door do
