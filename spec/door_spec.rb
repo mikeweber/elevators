@@ -63,6 +63,11 @@ describe Door do
     expect(door.held_open).to be(true)
   end
 
+  it 'can determine when the elevator is between floors' do
+    door = Door.new
+    expect(door.between_floors?).to be(nil)
+  end
+
   it 'cannot be closed when being held open' do
     door = Door.new
     door.open!
