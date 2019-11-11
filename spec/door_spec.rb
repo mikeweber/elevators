@@ -90,6 +90,11 @@ describe Door do
     expect do
       door.open!
     end.to_not change { door.open? }.from(false)
+
+    door = Door.new(-> { false })
+    expect do
+      door.open!
+    end.to change { door.open? }.from(false).to(true)
   end
 
   it 'cannot be closed when being held open' do
