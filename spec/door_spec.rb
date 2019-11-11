@@ -72,6 +72,14 @@ describe Door do
     expect(door.between_floors?).to be(nil)
   end
 
+  it 'takes in a lambda for determining when an elevator is between floors' do
+    door = Door.new(-> { false })
+    expect(door.between_floors?).to be(false)
+
+    door = Door.new(-> { true })
+    expect(door.between_floors?).to be(true)
+  end
+
   it 'cannot be closed when being held open' do
     door = Door.new
     door.open!
