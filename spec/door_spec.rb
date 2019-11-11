@@ -83,6 +83,13 @@ describe Door do
     expect(door.between_floors?).to be(true)
   end
 
+  it 'cannot open when it is between floors' do
+    door = Door.new(-> { true })
+    expect do
+      door.open!
+    end.to_not change { door.open? }.from(false)
+  end
+
   it 'cannot be closed when being held open' do
     door = Door.new
     door.open!
