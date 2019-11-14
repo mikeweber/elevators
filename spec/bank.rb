@@ -21,6 +21,18 @@ class Bank
   def step!
     elevators.each { |el| el.step! }
   end
+
+  def floors
+    elevators.map { |el| el.floor }
+  end
+
+  def statuses
+    elevators.map { |el| el.status }
+  end
+
+  def doors_open
+    elevators.map { |el| el.open? }
+  end
 end
 
 describe Bank do
