@@ -71,6 +71,24 @@ describe Elevator do
 
       expect_elevator_status(elevator, 3, Elevator::WAITING, true)
     end
+
+    it 'cannot open the doors while in transit' do
+      door     = Door.new
+      elevator = Elevator.new(door)
+      elevator.call_to_floor(2)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
+
+      elevator.step!
+      expect { door.open! }.to_not change { elevator.open? }.from(false)
+      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
+
+      elevator.step!
+
+      expect_elevator_status(elevator, 2, Elevator::WAITING, true)
+    end
   end
 
   context 'when status is going_down' do
