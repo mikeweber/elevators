@@ -1,8 +1,15 @@
 require_relative '../lib/elevator'
 
 class Bank
-  def elevators
-    [Elevator.new]
+  attr_reader :elevators
+
+  private
+  attr_writer :elevators
+
+  public
+
+  def initialize(elevators = [Elevator.new])
+    self.elevators = elevators
   end
 end
 
