@@ -1,17 +1,19 @@
+require_relative './door'
+
 class Elevator
   WAITING    = 'waiting'.freeze
   GOING_UP   = 'going_up'.freeze
   GOING_DOWN = 'going_down'.freeze
 
   private
-  attr_writer :floor, :status, :open
+  attr_writer :floor, :status, :door
 
   public
 
-  attr_reader :floor, :status, :open, :requested_floors
+  attr_reader :floor, :status, :door, :requested_floors
 
-  def initialize
-    self.open         = false
+  def initialize(door = Door.new)
+    self.door         = door
     self.status       = WAITING
     self.floor        = 0
     @requested_floors = []
@@ -30,11 +32,11 @@ class Elevator
   end
 
   def closed?
-    !open
+    door.closed?
   end
 
   def open?
-    open
+    door.open?
   end
 
   def call_to_floor(new_floor)
@@ -115,10 +117,10 @@ class Elevator
   end
 
   def open!
-    self.open = true
+    door.open!
   end
 
   def close!
-    self.open = false
+    door.close!
   end
 end
