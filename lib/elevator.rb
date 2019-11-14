@@ -57,8 +57,10 @@ class Elevator
     case status
     when GOING_UP
       self.floor += 1
+      lock_door!
     when GOING_DOWN
       self.floor -= 1
+      lock_door!
     end
   end
 
@@ -72,6 +74,7 @@ class Elevator
     return unless on_requested_floor?
 
     remove_current_floor_from_queue!
+    unlock_door!
     open!
     finish_route!
   end
@@ -114,6 +117,14 @@ class Elevator
 
   def wait!
     self.status = WAITING
+  end
+
+  def lock_door!
+    door.lock!
+  end
+
+  def unlock_door!
+    door.unlock!
   end
 
   def open!
