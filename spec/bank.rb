@@ -37,7 +37,7 @@ class Bank
   private
 
   def sorted_eligible_elevators(requested_floor)
-    elevators.select { |el| el.waiting? || el.going_down? && requested_floor < el.floor }.sort_by { |el| (requested_floor - el.floor).abs }
+    elevators.select { |el| el.waiting? || el.going_down? && requested_floor < el.floor || el.going_up? && requested_floor > el.floor }.sort_by { |el| (requested_floor - el.floor).abs }
   end
 end
 
