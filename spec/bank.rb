@@ -1,0 +1,3 @@
+describe Bank do
+
+end
