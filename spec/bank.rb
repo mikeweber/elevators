@@ -115,6 +115,16 @@ describe Bank do
         expect(bank.floors).to eq([4, 5, -1, -1])
         expect(bank.statuses).to eq([Elevator::GOING_DOWN, Elevator::GOING_DOWN, Elevator::WAITING, Elevator::GOING_UP])
         expect(bank.doors_open).to eq([false, false, true, false])
+
+        bank.step!
+        expect(bank.floors).to eq([3, 4, -1, 0])
+        expect(bank.statuses).to eq([Elevator::GOING_DOWN, Elevator::GOING_DOWN, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, false, false])
+
+        bank.step!
+        expect(bank.floors).to eq([2, 3, -1, 1])
+        expect(bank.statuses).to eq([Elevator::GOING_DOWN, Elevator::GOING_DOWN, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([true, false, false, false])
       end
     end
   end
