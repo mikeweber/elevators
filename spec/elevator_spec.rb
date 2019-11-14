@@ -73,7 +73,7 @@ describe Elevator do
 
     it 'cannot open the doors while in transit' do
       door     = Door.new
-      elevator = Elevator.new(door)
+      elevator = Elevator.new(door: door)
       elevator.call_to_floor(2)
 
       elevator.step!

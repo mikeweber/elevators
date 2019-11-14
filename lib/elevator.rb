@@ -12,10 +12,10 @@ class Elevator
 
   attr_reader :floor, :status, :door, :requested_floors
 
-  def initialize(door = Door.new)
+  def initialize(door: Door.new, floor: 0)
     self.door         = door
     self.status       = WAITING
-    self.floor        = 0
+    self.floor        = floor
     @requested_floors = []
   end
 
