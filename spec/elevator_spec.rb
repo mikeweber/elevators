@@ -42,34 +42,22 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(1)
 
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::GOING_UP, false],
+        [1, Elevator::WAITING,  true]
+      ])
     end
 
     it 'keeps going up until it has reached the destination floor' do
       elevator = Elevator.new
       elevator.call_to_floor(3)
 
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 3, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::GOING_UP, false],
+        [1, Elevator::GOING_UP, false],
+        [2, Elevator::GOING_UP, false],
+        [3, Elevator::WAITING,  true]
+      ])
     end
 
     it 'cannot open the doors while in transit' do
@@ -96,34 +84,22 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(-1)
 
-      elevator.step!
-
-      expect_elevator_status(elevator,  0, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, -1, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [ 0, Elevator::GOING_DOWN, false],
+        [-1, Elevator::WAITING,    true]
+      ])
     end
 
     it 'keeps going down until it has reached the destination floor' do
       elevator = Elevator.new
       elevator.call_to_floor(-3)
 
-      elevator.step!
-
-      expect_elevator_status(elevator,  0, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, -1, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, -2, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, -3, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [ 0, Elevator::GOING_DOWN, false],
+        [-1, Elevator::GOING_DOWN, false],
+        [-2, Elevator::GOING_DOWN, false],
+        [-3, Elevator::WAITING,    true]
+      ])
     end
   end
 
@@ -132,26 +108,18 @@ describe Elevator do
       elevator = Elevator.new
       elevator.call_to_floor(1)
 
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::GOING_UP, false],
+        [1, Elevator::WAITING,  true]
+      ])
 
       elevator.call_to_floor(2)
-      elevator.step!
 
-      expect_elevator_status(elevator, 1, Elevator::WAITING, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [1, Elevator::WAITING,  false],
+        [1, Elevator::GOING_UP, false],
+        [2, Elevator::WAITING,  true]
+      ])
     end
   end
 
@@ -164,33 +132,15 @@ describe Elevator do
       elevator.call_to_floor(4)
       elevator.call_to_floor(3)
 
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_UP, true)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 3, Elevator::GOING_UP, true)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 3, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 4, Elevator::WAITING, true)
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::GOING_UP, false],
+        [1, Elevator::GOING_UP, true],
+        [1, Elevator::GOING_UP, false],
+        [2, Elevator::GOING_UP, false],
+        [3, Elevator::GOING_UP, true],
+        [3, Elevator::GOING_UP, false],
+        [4, Elevator::WAITING,  true],
+      ])
     end
 
     it 'switches from GOING_UP to GOING_DOWN when no more floors are requested above the current_floor' do
@@ -199,36 +149,28 @@ describe Elevator do
 
       elevator.call_to_floor(2)
 
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::GOING_UP, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::GOING_UP, false],
+        [1, Elevator::GOING_UP, false]
+      ])
 
       elevator.call_to_floor(0)
       expect_elevator_status(elevator, 1, Elevator::GOING_UP, false)
 
+      expect_elevator_statuses(elevator, [
+        [2, Elevator::WAITING,    true],
+        [2, Elevator::WAITING,    false],
+        [2, Elevator::GOING_DOWN, false],
+        [1, Elevator::GOING_DOWN, false],
+        [0, Elevator::WAITING,    true]
+      ])
+    end
+  end
+
+  def expect_elevator_statuses(elevator, statuses)
+    statuses.each do |expected_floor, expected_status, expected_door_state|
       elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::WAITING, true)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::WAITING, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 2, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 1, Elevator::GOING_DOWN, false)
-
-      elevator.step!
-
-      expect_elevator_status(elevator, 0, Elevator::WAITING, true)
+      expect_elevator_status(elevator, expected_floor, expected_status, expected_door_state)
     end
   end
 
