@@ -34,7 +34,7 @@ describe Door do
 
   it 'can be held closed' do
     door = Door.new
-    door.safe_to_open = false
+    door.lock!
     expect(door.safe_to_open?).to be(false)
   end
 
@@ -45,12 +45,12 @@ describe Door do
 
   it 'cannot open when is unsafe' do
     door = Door.new
-    door.safe_to_open = false
+    door.lock!
     expect do
       door.open!
     end.to_not change { door.open? }.from(false)
 
-    door.safe_to_open = true
+    door.unlock!
     expect do
       door.open!
     end.to change { door.open? }.from(false).to(true)
