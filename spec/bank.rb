@@ -25,4 +25,18 @@ describe Bank do
     expect(bank.elevators.first).to be_a(Elevator)
     expect(bank.elevators.last).to be_a(Elevator)
   end
+
+  context 'when calling for an elevator' do
+    it 'calls the first elevator in the list' do
+      el1 = Elevator.new
+      el2 = Elevator.new
+      bank = Bank.new([el1, el2])
+
+      expect do
+        bank.call_to_floor(0)
+        bank.step!
+      end.to change { el1.open? }.from(false).to(true)
+      expect(el2).to be_closed
+    end
+  end
 end
