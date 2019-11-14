@@ -97,8 +97,8 @@ describe Bank do
     end
 
     context 'and all elevators are busy' do
-      it 'calls the closest elevator that is heading towards the floor' do
-        el1 = Elevator.new(floor:  5)
+      it 'calls the closest elevator that is heading down to the requested floor' do
+        el1 = Elevator.new(floor:  5) # This is the closest elevator on the way
         el2 = Elevator.new(floor:  6)
         el3 = Elevator.new(floor:  0)
         el4 = Elevator.new(floor: -2)
@@ -131,6 +131,37 @@ describe Bank do
         expect(bank.floors).to eq([2, 3, -1, 1])
         expect(bank.statuses).to eq([Elevator::GOING_DOWN, Elevator::GOING_DOWN, Elevator::WAITING, Elevator::GOING_UP])
         expect(bank.doors_open).to eq([true, false, false, false])
+      end
+
+      it 'calls the closest elevator that is heading up to the requested floor' do
+        el1 = Elevator.new(floor: 0)
+        el2 = Elevator.new(floor: 1) # This is the closest elevator on the way
+        el3 = Elevator.new(floor: 4)
+        el4 = Elevator.new(floor: 6)
+        bank = Bank.new([el1, el2, el3, el4])
+
+        el1.call_to_floor(10)
+        el2.call_to_floor(10)
+        el3.call_to_floor(10)
+        el4.call_to_floor(0)
+        bank.step!
+
+        expect(el1.status).to eq(Elevator::GOING_UP)
+        expect(el2.status).to eq(Elevator::GOING_UP)
+        expect(el3.status).to eq(Elevator::GOING_UP)
+        expect(el4.status).to eq(Elevator::GOING_DOWN)
+
+        bank.call_to_floor(3)
+
+        bank.step!
+        expect(bank.floors).to eq([1, 2, 5, 5])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_DOWN])
+        expect(bank.doors_open).to eq([false, false, false, false])
+
+        bank.step!
+        expect(bank.floors).to eq([2, 3, 6, 4])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_DOWN])
+        expect(bank.doors_open).to eq([false, true, false, false])
       end
     end
   end
