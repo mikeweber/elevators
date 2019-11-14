@@ -1,9 +1,9 @@
 class Door
-  attr_accessor :held_open, :safe_to_open
-  attr_reader :open
+  attr_accessor :held_open
+  attr_reader :open, :safe_to_open
 
   private
-  attr_writer :open
+  attr_writer :open, :safe_to_open
 
   public
 
@@ -31,6 +31,14 @@ class Door
 
   def open?
     open
+  end
+
+  def lock!
+    self.safe_to_open = false
+  end
+
+  def unlock!
+    self.safe_to_open = true
   end
 
   def safe_to_open?
