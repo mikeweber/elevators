@@ -10,16 +10,21 @@ class Bank
 
   def initialize(elevators = [Elevator.new])
     self.elevators = elevators
+    @queue = []
   end
 
   def call_to_floor(floor)
-    return unless elevator = sorted_eligible_elevators(floor).first
+    return add_to_queue!(floor) unless elevator = sorted_eligible_elevators(floor).first
 
     elevator.call_to_floor(floor)
   end
 
   def step!
+    old_queue = @queue
+    @queue = []
+
     elevators.each { |el| el.step! }
+    old_queue.each { |floor| call_to_floor(floor) }
   end
 
   def floors
@@ -38,6 +43,10 @@ class Bank
 
   def sorted_eligible_elevators(requested_floor)
     elevators.select { |el| el.waiting? || el.going_down? && requested_floor < el.floor || el.going_up? && requested_floor > el.floor }.sort_by { |el| (requested_floor - el.floor).abs }
+  end
+
+  def add_to_queue!(floor)
+    @queue << floor
   end
 end
 
