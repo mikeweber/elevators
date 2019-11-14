@@ -1,20 +1,20 @@
 class Door
-  attr_accessor :held_open
-  attr_reader :open, :between_floors_lambda
+  attr_accessor :held_open, :safe_to_open
+  attr_reader :open
 
   private
-  attr_writer :open, :between_floors_lambda
+  attr_writer :open
 
   public
 
-  def initialize(between_floors_lambda = nil)
-    self.open                  = false
-    self.held_open             = false
-    self.between_floors_lambda = between_floors_lambda
+  def initialize
+    self.open         = false
+    self.held_open    = false
+    self.safe_to_open = true
   end
 
   def open!
-    return if between_floors?
+    return unless safe_to_open?
 
     self.open = true
   end
@@ -33,10 +33,8 @@ class Door
     open
   end
 
-  def between_floors?
-    return if between_floors_lambda.nil?
-
-    between_floors_lambda.call
+  def safe_to_open?
+    safe_to_open
   end
 end
 
@@ -72,26 +70,25 @@ describe Door do
     expect(door.held_open).to be(true)
   end
 
-  it 'can determine when the elevator is between floors' do
+  it 'can be held closed' do
     door = Door.new
-    expect(door.between_floors?).to be(nil)
+    door.safe_to_open = false
+    expect(door.safe_to_open?).to be(false)
   end
 
-  it 'takes in a lambda for determining when an elevator is between floors' do
-    door = Door.new(-> { false })
-    expect(door.between_floors?).to be(false)
-
-    door = Door.new(-> { true })
-    expect(door.between_floors?).to be(true)
+  it 'can be allowed to open' do
+    door = Door.new
+    expect(door.safe_to_open?).to be(true)
   end
 
-  it 'cannot open when it is between floors' do
-    door = Door.new(-> { true })
+  it 'cannot open when is unsafe' do
+    door = Door.new
+    door.safe_to_open = false
     expect do
       door.open!
     end.to_not change { door.open? }.from(false)
 
-    door = Door.new(-> { false })
+    door.safe_to_open = true
     expect do
       door.open!
     end.to change { door.open? }.from(false).to(true)
