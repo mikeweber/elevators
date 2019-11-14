@@ -1,4 +1,7 @@
 class Bank
+  def elevators
+    [nil]
+  end
 end
 
 describe Bank do
