@@ -55,11 +55,25 @@ describe Bank do
       el1.call_to_floor(1)
       el1.step!
 
+      expect(el1.floor).to eq(0)
       expect do
         bank.call_to_floor(0)
         bank.step!
       end.to change { el2.open? }.from(false).to(true)
       expect(el1.floor).to_not eq(0)
+    end
+
+    it 'calls the closest' do
+      el1 = Elevator.new(floor:  2)
+      el2 = Elevator.new(floor: -1)
+      bank = Bank.new([el1, el2])
+
+      expect(el1.status).to eq(Elevator::WAITING)
+      expect do
+        bank.call_to_floor(0)
+        bank.step!
+      end.to change { el2.status }.from(Elevator::WAITING).to(Elevator::GOING_UP)
+      expect(el1.status).to eq(Elevator::WAITING)
     end
   end
 end
