@@ -46,5 +46,20 @@ describe Bank do
       end.to change { el1.open? }.from(false).to(true)
       expect(el2).to be_closed
     end
+
+    it 'calls the first available elevator' do
+      el1 = Elevator.new
+      el2 = Elevator.new
+      bank = Bank.new([el1, el2])
+
+      el1.call_to_floor(1)
+      el1.step!
+
+      expect do
+        bank.call_to_floor(0)
+        bank.step!
+      end.to change { el2.open? }.from(false).to(true)
+      expect(el1.floor).to_not eq(0)
+    end
   end
 end
