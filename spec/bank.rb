@@ -11,6 +11,14 @@ class Bank
   def initialize(elevators = [Elevator.new])
     self.elevators = elevators
   end
+
+  def call_to_floor(floor)
+    elevators[0].call_to_floor(floor)
+  end
+
+  def step!
+    elevators.each { |el| el.step! }
+  end
 end
 
 describe Bank do
