@@ -1,6 +1,8 @@
+require_relative '../lib/elevator'
+
 class Bank
   def elevators
-    [nil]
+    [Elevator.new]
   end
 end
 
