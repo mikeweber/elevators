@@ -13,7 +13,7 @@ class Bank
   end
 
   def call_to_floor(floor)
-    return unless elevator = elevators.select { |el| el.waiting? || el.going_down? && floor < el.floor }.sort_by { |el| (floor - el.floor).abs }.first
+    return unless elevator = sorted_eligible_elevators(floor).first
 
     elevator.call_to_floor(floor)
   end
@@ -32,6 +32,12 @@ class Bank
 
   def doors_open
     elevators.map { |el| el.open? }
+  end
+
+  private
+
+  def sorted_eligible_elevators(requested_floor)
+    elevators.select { |el| el.waiting? || el.going_down? && requested_floor < el.floor }.sort_by { |el| (requested_floor - el.floor).abs }
   end
 end
 
