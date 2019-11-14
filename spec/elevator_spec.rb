@@ -18,6 +18,17 @@ describe Elevator do
       expect_elevator_status(elevator, 0, Elevator::WAITING, true)
     end
 
+    it 'closes the doors after reaching the last destination' do
+      elevator = Elevator.new
+      elevator.call_to_floor(0)
+      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
+
+      expect_elevator_statuses(elevator, [
+        [0, Elevator::WAITING, true],
+        [0, Elevator::WAITING, false]
+      ])
+    end
+
     it 'begins the process of going up to the requested floor when called to a higher floor' do
       elevator = Elevator.new
       elevator.call_to_floor(1)
