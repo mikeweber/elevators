@@ -13,7 +13,7 @@ class Bank
   end
 
   def call_to_floor(floor)
-    return unless elevator = elevators.sort_by { |el| (el.floor - floor).abs }.detect { |el| el.waiting? }
+    return unless elevator = elevators.select { |el| el.waiting? || el.going_down? && floor < el.floor }.sort_by { |el| (floor - el.floor).abs }.first
 
     elevator.call_to_floor(floor)
   end
