@@ -163,6 +163,51 @@ describe Bank do
         expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_UP, Elevator::GOING_DOWN])
         expect(bank.doors_open).to eq([false, true, false, false])
       end
+
+      it 'waits for the next eligible elevator when none exist at the time of the call' do
+        el1 = Elevator.new(floor: 1)
+        el2 = Elevator.new(floor: 2) # This elevator will finish its route first
+        el3 = Elevator.new(floor: 3)
+        bank = Bank.new([el1, el2, el3])
+
+        el1.call_to_floor(10)
+        el2.call_to_floor(3)
+        el3.call_to_floor(10)
+        bank.step!
+
+        expect(el1.status).to eq(Elevator::GOING_UP)
+        expect(el2.status).to eq(Elevator::GOING_UP)
+        expect(el3.status).to eq(Elevator::GOING_UP)
+
+        # elevator 1 should not respond since it's already in motion, even though
+        # it's already on the requested floor
+        bank.call_to_floor(1)
+
+        bank.step!
+        expect(bank.floors).to eq([2, 3, 4])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, true, false])
+
+        bank.step!
+        expect(bank.floors).to eq([3, 3, 5])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, false])
+
+        bank.step!
+        expect(bank.floors).to eq([4, 3, 6])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::GOING_DOWN, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, false])
+
+        bank.step!
+        expect(bank.floors).to eq([5, 2, 7])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::GOING_DOWN, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, false])
+
+        bank.step!
+        expect(bank.floors).to eq([6, 1, 8])
+        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, true, false])
+      end
     end
   end
 end
