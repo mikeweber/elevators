@@ -179,7 +179,7 @@ describe Bank do
         el3 = Elevator.new(floor: 3)
         bank = Bank.new([el1, el2, el3])
 
-        el1.call_to_floor(10)
+        el1.call_to_floor(6)
         el2.call_to_floor(3)
         el3.call_to_floor(10)
         bank.step!
@@ -214,8 +214,13 @@ describe Bank do
 
         bank.step!
         expect(bank.floors).to eq([6, 1, 8])
-        expect(bank.statuses).to eq([Elevator::GOING_UP, Elevator::WAITING, Elevator::GOING_UP])
-        expect(bank.doors_open).to eq([false, true, false])
+        expect(bank.statuses).to eq([Elevator::WAITING, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([true, true, false])
+
+        bank.step!
+        expect(bank.floors).to eq([6, 1, 9])
+        expect(bank.statuses).to eq([Elevator::WAITING, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, false])
       end
     end
   end
