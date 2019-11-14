@@ -75,5 +75,33 @@ describe Bank do
       end.to change { el2.status }.from(Elevator::WAITING).to(Elevator::GOING_UP)
       expect(el1.status).to eq(Elevator::WAITING)
     end
+
+    context 'and all elevators are busy' do
+      it 'calls the closest elevator that is heading towards the floor' do
+        el1 = Elevator.new(floor:  5)
+        el2 = Elevator.new(floor:  6)
+        el3 = Elevator.new(floor:  0)
+        el4 = Elevator.new(floor: -2)
+        bank = Bank.new([el1, el2, el3, el4])
+
+        el1.call_to_floor(-1)
+        el2.call_to_floor(-1)
+        el3.call_to_floor(-1)
+        el4.call_to_floor(10)
+        bank.step!
+
+        expect(el1.status).to eq(Elevator::GOING_DOWN)
+        expect(el2.status).to eq(Elevator::GOING_DOWN)
+        expect(el3.status).to eq(Elevator::GOING_DOWN)
+        expect(el4.status).to eq(Elevator::GOING_UP)
+
+        bank.call_to_floor(2)
+
+        bank.step!
+        expect(bank.floors).to eq([4, 5, -1, -1])
+        expect(bank.statuses).to eq([Elevator::GOING_DOWN, Elevator::GOING_DOWN, Elevator::WAITING, Elevator::GOING_UP])
+        expect(bank.doors_open).to eq([false, false, true, false])
+      end
+    end
   end
 end
