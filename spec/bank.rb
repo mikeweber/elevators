@@ -1,3 +1,6 @@
-describe Bank do
+class Bank
 
+end
+
+describe Bank do
 end
