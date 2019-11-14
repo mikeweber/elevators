@@ -13,7 +13,7 @@ class Bank
   end
 
   def call_to_floor(floor)
-    elevators.detect { |el| el.waiting? }.call_to_floor(floor)
+    elevators.sort_by { |el| (el.floor - floor).abs }.detect { |el| el.waiting? }.call_to_floor(floor)
   end
 
   def step!
