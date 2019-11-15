@@ -70,7 +70,7 @@ describe Bank do
       bank = Bank.new([el1, el2])
 
       expect do
-        bank.call_to_floor(0)
+        bank.call_to_floor(0, :up)
         bank.step!
       end.to change { el1.open? }.from(false).to(true)
       expect(el2).to be_closed
@@ -86,7 +86,7 @@ describe Bank do
 
       expect(el1.floor).to eq(0)
       expect do
-        bank.call_to_floor(0)
+        bank.call_to_floor(0, :up)
         bank.step!
       end.to change { el2.open? }.from(false).to(true)
       expect(el1.floor).to_not eq(0)
@@ -99,7 +99,7 @@ describe Bank do
 
       expect(el1.status).to eq(Elevator::WAITING)
       expect do
-        bank.call_to_floor(0)
+        bank.call_to_floor(0, :up)
         bank.step!
       end.to change { el2.status }.from(Elevator::WAITING).to(Elevator::GOING_UP)
       expect(el1.status).to eq(Elevator::WAITING)
@@ -124,7 +124,7 @@ describe Bank do
         expect(el3.status).to eq(Elevator::GOING_DOWN)
         expect(el4.status).to eq(Elevator::GOING_UP)
 
-        bank.call_to_floor(2)
+        bank.call_to_floor(2, :down)
 
         bank.step!
         expect(bank.floors).to eq([4, 5, -1, -1])
@@ -160,7 +160,7 @@ describe Bank do
         expect(el3.status).to eq(Elevator::GOING_UP)
         expect(el4.status).to eq(Elevator::GOING_DOWN)
 
-        bank.call_to_floor(3)
+        bank.call_to_floor(3, :up)
 
         bank.step!
         expect(bank.floors).to eq([1, 2, 5, 5])
@@ -190,7 +190,7 @@ describe Bank do
 
         # elevator 1 should not respond since it's already in motion, even though
         # it's already on the requested floor
-        bank.call_to_floor(1)
+        bank.call_to_floor(1, :up)
 
         bank.step!
         expect(bank.floors).to eq([2, 3, 4])
