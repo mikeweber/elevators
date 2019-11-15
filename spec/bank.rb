@@ -13,7 +13,7 @@ class Bank
     @queue = []
   end
 
-  def call_to_floor(floor)
+  def call_to_floor(floor, direction)
     return add_to_queue!(floor) unless elevator = sorted_eligible_elevators(floor).first
 
     elevator.call_to_floor(floor)
