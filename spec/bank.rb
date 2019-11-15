@@ -222,6 +222,24 @@ describe Bank do
         expect(bank.statuses).to eq([Elevator::WAITING, Elevator::WAITING, Elevator::GOING_UP])
         expect(bank.doors_open).to eq([false, false, false])
       end
+
+      it 'only calls elevator heading in the same direction as the request' do
+        el1 = Elevator.new(floor: 1)
+        el2 = Elevator.new(floor: 2)
+        el3 = Elevator.new(floor: 6) # This elevator is the only one going down
+        bank = Bank.new([el1, el2, el3])
+
+        el1.call_to_floor(6)
+        el2.call_to_floor(3)
+        el3.call_to_floor(0)
+        bank.step!
+
+        expect(el1.status).to eq(Elevator::GOING_UP)
+        expect(el2.status).to eq(Elevator::GOING_UP)
+        expect(el3.status).to eq(Elevator::GOING_DOWN)
+
+        bank.call_to_floor(1, :down)
+      end
     end
   end
 end
