@@ -14,7 +14,7 @@ class Bank
   end
 
   def call_to_floor(floor, direction)
-    return add_to_queue!(floor) unless elevator = sorted_eligible_elevators(floor).first
+    return add_to_queue!(floor, direction) unless elevator = sorted_eligible_elevators(floor).first
 
     elevator.call_to_floor(floor)
   end
@@ -24,7 +24,7 @@ class Bank
     @queue = []
 
     elevators.each { |el| el.step! }
-    old_queue.each { |floor| call_to_floor(floor) }
+    old_queue.each { |floor, dir| call_to_floor(floor, dir) }
   end
 
   def floors
@@ -45,8 +45,8 @@ class Bank
     elevators.select { |el| el.waiting? || el.going_down? && requested_floor < el.floor || el.going_up? && requested_floor > el.floor }.sort_by { |el| (requested_floor - el.floor).abs }
   end
 
-  def add_to_queue!(floor)
-    @queue << floor
+  def add_to_queue!(floor, dir)
+    @queue << [floor, dir]
   end
 end
 
