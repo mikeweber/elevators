@@ -45,6 +45,7 @@ class Elevator
   end
 
   def step!
+    exorcise!
     return close! if open?
 
     move!
@@ -53,6 +54,10 @@ class Elevator
   end
 
   private
+
+  def exorcise!
+    self.haunted = false
+  end
 
   def move!
     case status
