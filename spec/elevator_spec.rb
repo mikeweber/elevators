@@ -176,6 +176,21 @@ describe Elevator do
         [0, Elevator::WAITING,    true]
       ])
     end
+
+    it 'should clear out multiple calls to the same floor' do
+      elevator = Elevator.new
+      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
+
+      elevator.call_to_floor(1)
+      elevator.call_to_floor(1)
+      elevator.call_to_floor(1)
+      elevator.call_to_floor(1)
+      elevator.call_to_floor(2)
+      elevator.step! # switch to going up
+      expect {
+        elevator.step! # arrive at floor one, open doors, and clear requested floor
+      }.to change { elevator.requested_floors }.from([1, 1, 1, 1, 2]).to([2])
+    end
   end
 
   def expect_elevator_statuses(elevator, statuses)
