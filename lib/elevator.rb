@@ -104,11 +104,7 @@ class Elevator
   end
 
   def remove_floor_from_queue!(floor_to_remove)
-    new_requested_floors = []
-    requested_floors.each do |requested_floor|
-      new_requested_floors << requested_floor unless requested_floor == floor_to_remove
-    end
-    @requested_floors = new_requested_floors
+    requested_floors.delete(floor_to_remove)
   end
 
   def on_requested_floor?
