@@ -6,17 +6,17 @@ class Elevator
   GOING_DOWN = 'going_down'.freeze
 
   private
-  attr_writer :floor, :status, :door
+  attr_writer :floor, :status, :door, :requested_floors
 
   public
 
   attr_reader :floor, :status, :door, :requested_floors
 
   def initialize(door: Door.new, floor: 0)
-    self.door         = door
-    self.status       = WAITING
-    self.floor        = floor
-    @requested_floors = []
+    self.door             = door
+    self.status           = WAITING
+    self.floor            = floor
+    self.requested_floors = []
   end
 
   def waiting?
