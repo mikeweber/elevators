@@ -191,19 +191,6 @@ describe Elevator do
         elevator.step! # arrive at floor one, open doors, and clear requested floor
       }.to change { elevator.requested_floors }.from([1, 1, 1, 1, 2]).to([2])
     end
-
-    it 'should continue go in the direction it says that it is going' do
-      elevator = Elevator.new
-      elevator.haunted = true
-      expect_elevator_status(elevator, 0, Elevator::WAITING, false)
-
-      elevator.call_to_floor(1)
-
-      expect_elevator_statuses(elevator, [
-        [0, Elevator::GOING_UP,   false],
-        [1, Elevator::WAITING,    true],
-      ])
-    end
   end
 
   def expect_elevator_statuses(elevator, statuses)

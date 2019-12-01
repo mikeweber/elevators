@@ -5,7 +5,6 @@ class Elevator
   GOING_UP   = 'going_up'.freeze
   GOING_DOWN = 'going_down'.freeze
 
-  attr_accessor :haunted
   private
   attr_writer :floor, :status, :door
 
@@ -45,7 +44,6 @@ class Elevator
   end
 
   def step!
-    exorcise!
     return close! if open?
 
     move!
@@ -55,17 +53,13 @@ class Elevator
 
   private
 
-  def exorcise!
-    self.haunted = false
-  end
-
   def move!
     case status
     when GOING_UP
-      self.floor += haunted ? -1 : 1
+      self.floor += 1
       lock_door!
     when GOING_DOWN
-      self.floor -= haunted ? -1 : 1
+      self.floor -= 1
       lock_door!
     end
   end
